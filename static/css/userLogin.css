@@ -1,0 +1,40 @@
+body{
+    background-color: #bebebe;
+    font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+    color: rgb(0, 0, 0);
+    line-height: 1.5;
+    margin: 0 auto;
+    margin-top: 80px;
+    padding: 0;
+}
+
+button[type="submit"]{
+    background-color: #1E90FF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 140px;
+}
+
+button[type="submit"]:hover{
+    background-color: #0000FF;
+}
+
+h3{
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 18px;
+    margin-top: 11px;
+    margin-right: 22%;
+    font-weight: 400;
+}
+
+a{
+    text-decoration: none;
+    color: #4805cd;
+}

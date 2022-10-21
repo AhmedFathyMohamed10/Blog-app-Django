@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .comment {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .comment input{
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+        font-size: 16px;
+}
+
+    .comment button{
+    background-color: #00599e;
+    padding: 10px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    outline: none;
+    font-size: 12px;
+    cursor: pointer;
+    width: 80px;
+    padding: 1.em;
+    color: #fff;
+}
+
+.comments .comment-detail{
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+</style>
+
+
+<!-- Page header with logo and tagline-->
+<header class="py-5 bg-light border-bottom mb-4">
+    <div class="container">
+        <div class="text-center my-5">
+            <h1 class="fw-bolder">Welcome to Blog Home! made by <a style="text-decoration: none;" href="https://www.linkedin.com/in/ahmed-fathy-0b964520a/">Me</a></h1>
+            <p class="lead mb-0">A very contrast blog-app using django</p>
+        </div>
+    </div>
+</header>
+<!-- Page content-->
+<div class="container">
+        <!-- Search widget-->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="search">
+                    <div class="search__title">
+                        <h1>Search for posts</h1>
+                    </div>
+                    <div class="search__form">
+                        <form action="{% url 'search' %}" method="POST">
+                        {% csrf_token %}
+                            <input type="text" name="query" placeholder="Search...">
+                            <button type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Blog entries-->
+        {% for post in posts %}
+        <div style="margin-left: 160px;" class="col-lg-8">
+            <!-- Featured blog post-->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 style="color: blue;" class="card-title">{{post.title}}</h2>
+                    <a style="float: right; margin-top: -45px;" class="btn btn-primary" href="{% url 'post' post.id %}">Read more →</a>
+                    <p class="card-text">{{post.content}}</p>
+                    <div class="small text-muted">{{post.date_posted}}</div>
+                    <div class="comments" style="padding: 3px;">
+                        <p style="font-size: 20px;">Comments | {{post.comments.count}}</p>
+                        {% for comment in post.comments.all %}
+                        <div class="comment-detail">
+                            <p><strong>{{comment.author}}</strong> commented on this post.</p>
+                            <p>{{comment.comment}}</p>
+                            <p style="float: right; margin-top: -75px;"><strong>{{comment.date_posted}}</strong></p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="comment">
+                        <form id="comment-form" action="{% url 'comment' post.id %}" method="POST">
+                        {% csrf_token %}
+                            <input type="text" name="comment" placeholder="Comment..." required>
+                            <button type="submit">Comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+            <!-- Pagination-->
+            {% comment %} <nav aria-label="Pagination">
+                <hr class="my-0" />
+                <ul class="pagination justify-content-center my-4">
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">15</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+                </ul>
+            </nav>                 {% endcomment %}
+    </div>
+</div>
+{% endblock %}

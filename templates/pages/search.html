@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .comment {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .comment input{
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+        font-size: 16px;
+}
+
+    .comment button{
+    background-color: #00599e;
+    padding: 10px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    outline: none;
+    font-size: 12px;
+    cursor: pointer;
+    width: 80px;
+    padding: 1.em;
+    color: #fff;
+}
+
+.comments .comment-detail{
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+</style>
+<!--Search page-->
+<br>
+<br>
+<br>
+    <a style="margin-left: 30%; width:200px;" href="{% url 'index' %}" class="btn btn-primary">Back</a>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="search_result">
+                {% if not search %} <!--Get all posts-->
+                    {% for post in posts %}
+                        <div style="margin-left: 160px;" class="col-lg-8">
+                            <!-- Featured blog post-->
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h2 class="card-title">{{post.title}}</h2>
+                                    <p class="card-text">{{post.content}}</p>
+                                    <div class="small text-muted">{{post.date_posted}}</div>
+                                    <a class="btn btn-primary" href="{% url 'post' post.id %}">Read more →</a>
+                                    <div class="comments" style="padding: 3px;">
+                                         <p style="font-size: 20px;">Comments | {{post.comments.count}}</p>
+                                        {% for comment in post.comments.all %}
+                                        <div class="comment-detail">
+                                            <p><strong>{{comment.author}}</strong> commented on this post.</p>
+                                            <p>{{comment.comment}}</p>
+                                            <p style="float: right; margin-top: -75px;"><strong>{{comment.date_posted}}</strong></p>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="comment">
+                                        <form id="comment-form" action="{% url 'comment' post.id %}" method="POST">
+                                        {% csrf_token %}
+                                            <input type="text" name="comment" placeholder="Comment..." required>
+                                            <button type="submit">Comment</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% elif search %} <!--if search is found-->
+                    {% if posts %}
+                        <div class="row">
+                            {% for post in posts %}
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ post.title }}</h5>
+                                            <p class="card-text">{{ post.date_posted|timesince }}</p>
+                                            <p class="card-text">{{ post.content|truncatechars:100 }}</p>
+                                            <a href="{% url 'post' post.id %}" class="btn btn-primary">Read More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                            {% endfor %}
+                    {% else %}
+                        <h3>No results found</h3>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% comment %} <h2 class="text-center">Search Result</h2>
+                <hr>
+                <p class="text-center">Showing results for <strong>{{ query }}</strong></p>
+                <hr>
+                {% if posts %}
+                <div class="row">
+                    {% for post in posts %}
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ post.title }}</h5>
+                                <p class="card-text">{{ post.date_posted|timesince }}</p>
+                                <p class="card-text">{{ post.content|truncatechars:100 }}</p>
+                                <a href="{% url 'post' post.id %}" class="btn btn-primary">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                    <p class="text-center">No results found for <strong>{{ query }}</strong></p>
+                {% endif %} {% endcomment %}

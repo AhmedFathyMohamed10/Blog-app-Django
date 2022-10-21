@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .comment {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .comment input{
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+        font-size: 16px;
+}
+
+    .comment button{
+    background-color: #00599e;
+    padding: 10px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    outline: none;
+    font-size: 12px;
+    cursor: pointer;
+    width: 80px;
+    padding: 1.em;
+    color: #fff;
+}
+
+.comments .comment-detail{
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+</style>
+<br>
+<br>
+<br>
+<div style="margin-left: 260px;" class="col-lg-8">
+    <!-- Featured blog post-->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="small text-muted">{{post.date_posted}}</div>
+            <h2 class="card-title">{{post.title}}</h2>
+            <p class="card-text">{{post.content}}</p>
+            <a class="btn btn-primary" href="{% url 'index' %}"> → Get back</a>
+            <div class="comments" style="padding: 3px;">
+                <p style="font-size: 20px;">Comments | {{post.comments.count}}</p>
+                {% for comment in post.comments.all %}
+                <div class="comment-detail">
+                    <p><strong>{{comment.author}}</strong> commented on this post.</p>
+                    <p>{{comment.comment}}</p>
+                    <p style="float: right; margin-top: -75px;"><strong>{{comment.date_posted}}</strong></p>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="comment">
+                <form id="comment-form" action="{% url 'comment' post.id %}" method="POST">
+                {% csrf_token %}
+                    <input type="text" name="comment" placeholder="Comment..." required>
+                    <button type="submit">Comment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}
